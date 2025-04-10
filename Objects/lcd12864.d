@@ -1,6 +1,7 @@
 .\objects\lcd12864.o: Hardware\Lcd12864.c
 .\objects\lcd12864.o: Hardware\LCD12864.h
-.\objects\lcd12864.o: .\Start\STM32F10X.h
+.\objects\lcd12864.o: Hardware\Lcd12864Char.h
+.\objects\lcd12864.o: .\Start\stm32f10x.h
 .\objects\lcd12864.o: .\Start\core_cm3.h
 .\objects\lcd12864.o: D:\Development_Tool\Keil5\ARM\ARMCC\Bin\..\include\stdint.h
 .\objects\lcd12864.o: .\Start\system_stm32f10x.h

@@ -1,4 +1,5 @@
 #include "LCD12864.h"
+#include "Lcd12864Char.h"
 #include <STM32F10X.h>
 
 #define uint  unsigned int
@@ -121,11 +122,11 @@ void InitLCD_12864()
 {
 //	PSB=1;
 //	RST=1;
-	InitPort_Write_LCD12864();
-	WriteCommand_12864(0x01);//清显示
-	WriteCommand_12864(0x30);//8位数据,基本指令集
-	WriteCommand_12864(0x0c); //开显示
-	WriteCommand_12864(0x01);//清显示
+	LCD_Init();
+//	WriteCommand_12864(0x01);//清显示
+//	WriteCommand_12864(0x30);//8位数据,基本指令集
+//	WriteCommand_12864(0x0c); //开显示
+//	WriteCommand_12864(0x01);//清显示
 }
 
 
@@ -197,7 +198,7 @@ void DrawDot_Picture()   //画图,固定的一副二维图像Display_Picture[][];
 
 /*功能：输入X坐标和Y坐标，还有颜色类型，能自动将A点和B点相连*/
 /*Color: 1表示显示，0表示不显示*/
-
+#if 1
 void DrawDot_12864(uchar X,uchar Y,uchar Color)//坐标转换	 X坐标的取值变为【0,127】,Y的坐标取值变为【0,64】
 {
 		
@@ -237,7 +238,7 @@ void DrawDot_12864(uchar X,uchar Y,uchar Color)//坐标转换	 X坐标的取值变为【0,12
 	WriteCommand_12864(0x36);//扩充指令集，绘图显示开
 
 }	
-
+#endif
 
 
 

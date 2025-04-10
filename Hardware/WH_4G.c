@@ -1,5 +1,5 @@
 #include "WH_4G.h"
-#include "usart2.h" //包含需要的头文件
+#include "usart3.h" //包含需要的头文件
 #include "usart1.h"
 
 #include <stdint.h>
@@ -71,7 +71,7 @@ void Wire4G_sendData(uint16_t adder,uint16_t value)
 	Answer_buf[buf_count++] = crc_ & 0XFF;
 	//u2_printf("3\r\n");
 	u3_printf("buf_count:%d\r\n",buf_count);
-	u2_TxData(Answer_buf, buf_count);
+	u1_TxData(Answer_buf, buf_count);
 	//u2_printf("4\r\n");
 	
 //	
@@ -86,7 +86,7 @@ void Wire4G_sendData(uint16_t adder,uint16_t value)
 void Wire4G_yuzhiData(uint16_t *adder,uint16_t value) 
 	{
 	// 初始化发送缓冲区
-	uint8_t Answer_buf[32] = {0x07, 0x46, 0x00,*adder,0x00,0x01,0x02};
+	uint8_t Answer_buf[32] = {0x01, 0x46, 0x00,*adder,0x00,0x01,0x02};
 	
 	// 初始化计数器和数据帧长度
 	//uint8_t Answer1_buf[32] = {0x07, 0x46, 0x00,0x00,0x00,0x01,0x02,0x00,0x25,0xC9,0x3D};
@@ -100,7 +100,7 @@ void Wire4G_yuzhiData(uint16_t *adder,uint16_t value)
 	uint16_t crc_ = GetCRC16(&Answer_buf[0], 9);
 	Answer_buf[buf_count++] = crc_ >> 8;
 	Answer_buf[buf_count++] = crc_ & 0XFF;
-	u2_TxData(Answer_buf, buf_count);
+	u1_TxData(Answer_buf, buf_count);
 	
 }
  

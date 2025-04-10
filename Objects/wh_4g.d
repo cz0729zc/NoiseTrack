@@ -29,8 +29,8 @@
 .\objects\wh_4g.o: .\Library\stm32f10x_usart.h
 .\objects\wh_4g.o: .\Library\stm32f10x_wwdg.h
 .\objects\wh_4g.o: .\Library\misc.h
-.\objects\wh_4g.o: .\System\usart\usart2.h
+.\objects\wh_4g.o: .\System\usart\usart3.h
 .\objects\wh_4g.o: D:\Development_Tool\Keil5\ARM\ARMCC\Bin\..\include\stdio.h
 .\objects\wh_4g.o: D:\Development_Tool\Keil5\ARM\ARMCC\Bin\..\include\stdarg.h
 .\objects\wh_4g.o: D:\Development_Tool\Keil5\ARM\ARMCC\Bin\..\include\string.h
-.\objects\wh_4g.o: .\System\usart\usart3.h
+.\objects\wh_4g.o: .\System\usart\usart1.h
