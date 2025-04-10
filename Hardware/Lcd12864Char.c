@@ -160,3 +160,172 @@ void LCD_ShowChar(uint8_t x, uint8_t y, char ch) {
     char buf[2] = {ch, '\0'};
     LCD_PrintStringAt(x, y, buf);
 }
+
+/*********************绘图函数**************/
+
+/**
+  * @brief  设置LCD12864显示坐标
+  * @param  x: x轴坐标0~127, y: y轴坐标0~63
+  * @retval 无
+  */
+static void lcd_setXY(unsigned char x, unsigned char y)
+{
+	 if (y >= 32)
+	 {
+		 /* 下半屏 */
+		 LCD_WriteCmd(0x80 + (y - 32));	// y坐标
+		 LCD_WriteCmd(0x88 + (x>>4));	// x坐标
+	 }
+	 else
+	 {
+		 /* 上半屏 */
+		 LCD_WriteCmd(0x80 + y);		
+		 LCD_WriteCmd(0x80 + (x>>4));	
+	 }
+}
+ 
+/**
+  * @brief  清空屏幕
+  * @param  无
+  * @retval 无
+  */
+void lcd_clear(void)
+{
+	unsigned char x, y; 
+	
+	LCD_WriteCmd(0x34);    // 切换到扩展指令集   
+	
+	for(y=0; y<64; y++)
+	{   
+		lcd_setXY(0, y);	// 设置显示坐标
+  		for(x=0; x<8; x++)
+  		{	
+			/* 因为x轴一个地址对应16个像素点，可以连续发送两个字节数据 */
+  		    LCD_WriteData(0x00);
+			LCD_WriteData(0x00);
+  		}	
+	}
+	 
+    LCD_WriteCmd(0x36);    // 打开绘图显示
+	LCD_WriteCmd(0x30);    // 回到基本指令集
+}
+
+
+/**
+  * @brief  显示图片，注意显示起点坐标固定是(0, 0)
+  * @param  无
+  * @retval 无
+  */
+void lcd_draw_picture(const unsigned char *data)
+{
+	unsigned char x, y; 
+	
+	LCD_WriteCmd(0x34);    // 切换到扩展指令集   
+	
+	for(y=0; y<64; y++)
+	{   
+		lcd_setXY(0, y);	// 设置显示坐标
+  		for(x=0; x<8; x++)
+  		{	
+  		    LCD_WriteData(*data++);
+			LCD_WriteData(*data++);
+  		}	
+	}
+	 
+    LCD_WriteCmd(0x36);    // 打开绘图显示
+	LCD_WriteCmd(0x30);    // 回到基本指令集
+}
+
+/* x轴按位显示的位码表 */
+static const unsigned char set_pix_bit[8] = {0x80, 0x40, 0x20, 0x10, 0x08, 0x04, 0x02, 0x01};
+
+/* 显示缓冲区 */
+static unsigned char disp_buff[8][64] = {0};
+
+/**
+  * @brief  在LCD显示范围内绘制任意点
+			x坐标范围是：0~127，y坐标范围是：0~63
+  * @param  x: x轴坐标, y: y轴坐标, color: 颜色值，1：点亮像素，0：不点亮
+  * @retval 无
+  */
+void lcd_draw_dots(unsigned char x, unsigned char y, unsigned char color)
+{
+	LCD_WriteCmd(0x34);       // 切换到扩展指令集 
+	
+	/* 超出显示范围，退出函数 */
+	if ((x >= 128) || (y >= 64))
+        return;
+	
+	/* 设置x, y坐标 */
+	lcd_setXY(x, y);
+	
+	/* 填充显示缓冲区数据 */
+	if (color == 1)
+	{
+		/* 点亮某点像素 */
+		disp_buff[x>>3][y] |= 0x00;	
+		disp_buff[(x>>3)+1][y] |= set_pix_bit[x & 0x07];
+	}
+	else
+	{	
+		/* 熄灭某点像素 */
+		disp_buff[x>>3][y] |= 0x00;
+		disp_buff[(x>>3)+1][y] &= ~set_pix_bit[x & 0x07];
+	}
+	
+	/* 输出数据到LCD显示 */
+	if ((x >> 3) % 2 != 0)	// 判断x轴0~15个显示数据的奇偶性
+	{
+		/* 奇数 */
+		LCD_WriteData(disp_buff[x>>3][y]);
+		LCD_WriteData(disp_buff[(x>>3)+1][y]);
+	}
+	else
+	{
+		/* 偶数 */
+		LCD_WriteData(disp_buff[(x>>3)+1][y]);
+		LCD_WriteData(disp_buff[x>>3][y]);
+	}
+ 
+    LCD_WriteCmd(0x36);        // 打开绘图显示
+	LCD_WriteCmd(0x30);        // 回到基本指令集
+}
+
+
+/**
+  * @brief  绘制水平线
+  * @param  x0: x轴起点, y0: y0轴起点, x1: x轴结束点, color: 颜色值，1点亮像素，0不点亮
+  * @retval 无
+  */
+ void lcd_draw_Hline(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char color)
+ {
+     /* 超出显示范围，退出函数 */
+     if ((x0 >= 128) || (y0 >= 64) || (x1 >= 128))
+         return;
+     
+     for ( ; x1>=x0; x0++)
+         lcd_draw_dots(x0, y0, color);
+ }
+ 
+/**
+  * @brief  绘制垂直线
+  * @param  x0: x轴起点, y0: y轴起点, y1: y轴结束点, color: 颜色值，1点亮像素，0不点亮
+  * @retval 无
+  */
+ void lcd_draw_Vline(unsigned char x0, unsigned char y0, unsigned char y1, unsigned char color)
+ {
+     /* 超出显示范围，退出函数 */
+     if ((x0 >= 128) || (y0 >= 64) || (y1 >= 64))
+         return;
+     
+     for ( ; y1>=y0; y0++)
+         lcd_draw_dots(x0, y0, color);
+ }
+ 
+
+
+
+/*******************************************************/
+
+
+

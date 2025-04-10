@@ -21,7 +21,7 @@ Target DLL:      STLink\ST-LINKIII-KEIL_SWO.dll V3.0.1.0
 Dialog DLL:      TCM.DLL V1.32.0.0
  
 <h2>Project:</h2>
-D:\Development_Tool\Keil5\Project\噪音曲线和噪音大小噪声监测系统\噪音曲线和噪音大小噪声监测系统.uvprojx
+d:\Development_Tool\Keil5\Project\噪音曲线和噪音大小噪声监测系统\噪音曲线和噪音大小噪声监测系统.uvprojx
 Project File Date:  04/10/2025
 
 <h2>Output:</h2>
@@ -30,12 +30,18 @@ Build target 'Target 1'
 compiling main.c...
 .\Hardware\LCD12864.h(9): warning:  #1295-D: Deprecated declaration ReadData_12864 - give arg types
   extern unsigned int ReadData_12864();		//读数据
-User\main.c(253): warning:  #1-D: last line of file ends without a newline
-  //}
-User\main.c: 2 warnings, 0 errors
+.\Hardware\Lcd12864Char.h(37): warning:  #1295-D: Deprecated declaration lcd_clear - give arg types
+  void lcd_clear();
+User\main.c(344): warning:  #186-D: pointless comparison of unsigned integer with zero
+          if(y < 0) y = 0;
+User\main.c(416): warning:  #186-D: pointless comparison of unsigned integer with zero
+      last_y = (last_y > 63) ? 63 : (last_y < 0) ? 0 : last_y;
+User\main.c(421): warning:  #186-D: pointless comparison of unsigned integer with zero
+          y = (y > 63) ? 63 : (y < 0) ? 0 : y;
+User\main.c: 5 warnings, 0 errors
 linking...
-Program Size: Code=2276 RO-data=268 RW-data=20 ZI-data=1636  
-".\Objects\列车噪声在线监测系统.axf" - 0 Error(s), 2 Warning(s).
+Program Size: Code=19348 RO-data=848 RW-data=52 ZI-data=5660  
+".\Objects\列车噪声在线监测系统.axf" - 0 Error(s), 5 Warning(s).
 
 <h2>Software Packages used:</h2>
 

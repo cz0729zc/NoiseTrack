@@ -27,4 +27,14 @@ void LCD_ShowNum(uint8_t x, uint8_t y, uint16_t num, uint8_t len);
 void LCD_ShowString(uint8_t x, uint8_t y, const char *str);
 void LCD_ShowChar(uint8_t x, uint8_t y, char ch);
 
+
+
+
+void lcd_draw_Vline(unsigned char x0, unsigned char y0, unsigned char y1, unsigned char color);
+void lcd_draw_Hline(unsigned char x0, unsigned char y0, unsigned char x1, unsigned char color);
+void lcd_draw_picture(const unsigned char *data);
+void lcd_draw_dots(unsigned char x, unsigned char y, unsigned char color);
+void lcd_clear();
+
+
 #endif

@@ -44,3 +44,5 @@
 .\objects\main.o: .\System\usart\usart2.h
 .\objects\main.o: .\System\usart\usart3.h
 .\objects\main.o: .\System\timer\timer4.h
+.\objects\main.o: D:\Development_Tool\Keil5\ARM\ARMCC\Bin\..\include\stdlib.h
+.\objects\main.o: D:\Development_Tool\Keil5\ARM\ARMCC\Bin\..\include\math.h
