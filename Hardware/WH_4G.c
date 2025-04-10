@@ -1,6 +1,6 @@
 #include "WH_4G.h"
 #include "usart2.h" //包含需要的头文件
-#include "usart3.h"
+#include "usart1.h"
 
 #include <stdint.h>
 SU03T Su03t;
@@ -8,7 +8,7 @@ SU03T Su03t;
 //TX---PB10 RX---PB11
 void WH_4G_Config(void)
 {
-	Usart2_Init(115200);	
+	Usart1_Init(115200);	
 }
  
 
@@ -100,7 +100,7 @@ void Wire4G_yuzhiData(uint16_t *adder,uint16_t value)
 	uint16_t crc_ = GetCRC16(&Answer_buf[0], 9);
 	Answer_buf[buf_count++] = crc_ >> 8;
 	Answer_buf[buf_count++] = crc_ & 0XFF;
-	u1_TxData(Answer_buf, buf_count);
+	u2_TxData(Answer_buf, buf_count);
 	
 }
  

@@ -109,6 +109,5 @@ void u2_TxData(unsigned char *data, uint16_t length) {
         while((USART2->SR & 0X40) == 0); // µÈ´ı·¢ËÍ¼Ä´æÆ÷¿Õ
         USART2->DR = data[i];
 		u3_printf("data[]=%x\r\n",data[i]);
-    }
-	
+    }	
 }

@@ -46,6 +46,7 @@ int main(void)
     IIC_Init();             // IIC初始化
     LM2904_Init();          // 噪音传感器初始
     Usart3_Init(9600);
+	//WH_4G_Config();
     BEEP_Init();            // 蜂鸣器初始化
     Key_Init();             // 按键初始化
     
@@ -67,14 +68,14 @@ int main(void)
     TIM_Cmd(TIM4, ENABLE); // 启动TIM4
     
     while (1) 
-    { 
-        Key_Value key = Key_Scan(); // 扫描按键
+    {
+		Key_Value key = Key_Scan(); // 扫描按键
         
         if(!view_history_mode) // 正常模式
         {
             /* 读取并显示噪音值 */
             float noise = ConvertToDecibel(LM2904_ReadValue());
-            u3_printf("noise:%.2f dB\r\n", noise);
+            //u3_printf("noise:%.2f dB\r\n", noise);
             LCD_ShowNum(3, 0, (uint16_t)noise, 3);
             
             /* 显示阈值 */
@@ -94,6 +95,7 @@ int main(void)
             if(timer4_flag) {
                 timer4_flag = 0;
                 StoreCurrentData(noise);
+				//Wire4G_sendData(0x00,(uint16_t)noise);
             }
             
             /* 按键处理 */
