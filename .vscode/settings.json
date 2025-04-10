@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "delay.h": "c",
-        "usart3.h": "c"
+        "usart3.h": "c",
+        "string": "c"
     }
 }

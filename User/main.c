@@ -32,7 +32,7 @@ typedef struct {
 } StorageData;
 
 uint16_t storageAddr = 0;    // 当前存储地址
-float noise_threshold = 80.0; // 噪音阈值
+float noise_threshold = 100.0; // 噪音阈值
 uint32_t system_time = 0;    // 系统运行时间(秒)
 
 uint8_t view_history_mode = 0; // 0:正常模式 1:查看历史模式
@@ -114,9 +114,28 @@ int main(void)
             /* 根据显示模式更新界面 */
             if(display_mode == 0) {
                 /* 数值显示模式 */
+                LCD_ShowString(0, 0, "Noise:");
                 LCD_ShowNum(3, 0, (uint16_t)noise, 3);
                 LCD_ShowString(0, 1, "Thrsh:");
                 LCD_ShowNum(3, 1, (uint16_t)noise_threshold, 3);
+
+//                for (size_t i = 110; i < 128; i++)
+//                {
+//                    lcd_draw_dots(i, 0, 1); // 绘制分隔线 
+//                }
+				//lcd_draw_dots(60,0,1);
+
+                // lcd_draw_Vline(126, 0, 63, 1); // 绘制分隔线 
+                // lcd_draw_Vline(125, 0, 63, 1); // 绘制分隔线
+                // lcd_draw_Vline(124, 0, 63, 1); // 绘制分隔线
+                // lcd_draw_Vline(123, 0, 63, 1); // 绘制分隔线
+                // lcd_draw_Vline(122, 0, 63, 1); // 绘制分隔线
+                // lcd_draw_Vline(121, 0, 63, 1); // 绘制分隔线
+                // lcd_draw_Vline(120, 0, 63, 1); // 绘制分隔线
+                // lcd_draw_Vline(119, 0, 63, 1); // 绘制分隔线
+                // lcd_draw_Vline(118, 0, 63, 1); // 绘制分隔线
+                // lcd_draw_Vline(117, 0, 63, 1); // 绘制分隔线
+                // lcd_draw_Vline(116, 0, 63, 1); // 绘制分隔线
 
                 // 显示缓冲区填充状态
                 if(!IsWaveformBufferFull()) {
@@ -221,6 +240,7 @@ int main(void)
 
 
 // 修改UpdateWaveform函数实现数据滚动更新
+// 修改后的UpdateWaveform函数
 void UpdateWaveform(float noise_db) {
     // 缓冲区未满时直接添加数据
     if(waveform_index < WAVEFORM_POINTS) {
@@ -236,7 +256,6 @@ void UpdateWaveform(float noise_db) {
         waveform_data[WAVEFORM_POINTS-1] = noise_db;
     }
 }
-
 // 添加缓冲区状态检查函数
 uint8_t IsWaveformBufferFull(void) {
     return (waveform_index >= WAVEFORM_POINTS);
@@ -387,20 +406,10 @@ void DisplaySmoothWaveform(void) {
     // LCD_ShowString(120, 60, "30");
 }
 
-// 修改DisplayFullWaveform函数实现实时显示
 void DisplayFullWaveform(void) {
-    // 1. 自动计算显示范围（带10%余量）
-    float min_db = waveform_data[0];
-    float max_db = waveform_data[0];
-    for(int i = 1; i < WAVEFORM_POINTS; i++) {
-        if(waveform_data[i] < min_db) min_db = waveform_data[i];
-        if(waveform_data[i] > max_db) max_db = waveform_data[i];
-    }
-    
-    // 添加10%的显示余量
-    float margin = (max_db - min_db) * 0.1f;
-    min_db = fmaxf(min_db - margin, NOISE_FLOOR);
-    max_db = fminf(max_db + margin, NOISE_CEILING);
+    // 1. 计算显示范围（固定范围）
+    float min_db = NOISE_FLOOR;    // 使用预定义的最小值
+    float max_db = NOISE_CEILING;  // 使用预定义的最大值
     float db_range = max_db - min_db;
     
     // 2. 清屏
@@ -411,35 +420,41 @@ void DisplayFullWaveform(void) {
     lcd_draw_Hline(0, 63, 127, 1); // X轴
     
     // 4. 绘制完整波形（使用所有128点）
-    uint16_t last_x = 0;
-    uint8_t last_y = 63 - (uint8_t)((waveform_data[0] - min_db) * 63 / db_range);
-    last_y = (last_y > 63) ? 63 : (last_y < 0) ? 0 : last_y;
-    
-    for(int i = 1; i < WAVEFORM_POINTS; i++) {
-        uint16_t x = i; // 直接使用点索引（128点对应128像素）
+    for(int i = 0; i < WAVEFORM_POINTS; i++) {
+        // 计算Y坐标（0-63范围）
         uint8_t y = 63 - (uint8_t)((waveform_data[i] - min_db) * 63 / db_range);
-        y = (y > 63) ? 63 : (y < 0) ? 0 : y;
         
-        // 使用Bresenham算法绘制线段
-        int dx = abs((int)(x - last_x));
-        int dy = abs((int)(y - last_y));
-        int sx = (last_x < x) ? 1 : -1;
-        int sy = (last_y < y) ? 1 : -1;
-        int err = dx - dy;
+        // 确保y值在有效范围内
+        if(y > 63) y = 63;
+        if(y < 0) y = 0;
         
-        while(1) {
-            lcd_draw_dots(last_x, last_y, 1);
-            if(last_x == x && last_y == y) break;
-            
-            int e2 = 2 * err;
-            if(e2 > -dy) { err -= dy; last_x += sx; }
-            if(e2 < dx) { err += dx; last_y += sy; }
+        // 绘制当前点
+        lcd_draw_dots(i, y, 1);
+        
+        // 将该点下方的所有点置1（填充波形下方区域）
+        for(uint8_t fill_y = y + 1; fill_y <= 63; fill_y++) {
+            lcd_draw_dots(i, fill_y, 1);
         }
     }
     
-    // // 5. 显示当前范围（可选）
-    // LCD_ShowNum(110, 0, (uint16_t)max_db, 3);
-    // LCD_ShowNum(110, 60, (uint16_t)min_db, 3);
+    // 5. 显示当前范围
+   // LCD_ShowString(110, 0, "dB");
+    //LCD_ShowNum(110, 0, (uint16_t)max_db, 3);
+    //LCD_ShowNum(110, 60, (uint16_t)min_db, 3);
+    
+    // 6. 延迟1秒
+    delay_ms(1000);
+    
+    // 7. 清空缓冲区
+    waveform_index = 0;
+    
+    // 8. 重新填充缓冲区初始值
+    for(int i = 0; i < WAVEFORM_POINTS; i++) {
+        waveform_data[i] = NOISE_FLOOR;
+    }
+
+    display_mode = !display_mode;
+    lcd_clear();
 }
 
 
@@ -532,3 +547,4 @@ void DisplayMainScreen(void)
     LCD_ShowString(0, 0, "Noise:XXXdB");
     LCD_ShowString(0, 1, "Thrsh:XXXdB");
 }
+
