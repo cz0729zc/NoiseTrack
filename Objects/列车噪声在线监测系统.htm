@@ -3,7 +3,7 @@
 <title>Static Call Graph - [.\Objects\列车噪声在线监测系统.axf]</title></head>
 <body><HR>
 <H1>Static Call Graph for image .\Objects\列车噪声在线监测系统.axf</H1><HR>
-<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Thu Apr 10 18:07:54 2025
+<BR><P>#&#060CALLGRAPH&#062# ARM Linker, 5060528: Last Updated: Thu Apr 24 09:23:16 2025
 <BR><P>
 <H3>Maximum Stack Usage =        324 bytes + Unknown(Functions without stacksize, Cycles, Untraceable Function Pointers)</H3><H3>
 Call chain for Maximum Stack Depth:</H3>
@@ -1003,8 +1003,7 @@ Global Symbols
 <LI><a href="#[9e]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_Read_Byte
 <LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 </UL>
-<BR>[Called By]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadAllHistoryData
+<BR>[Called By]<UL><LI><a href="#[d8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;ReadAllHistoryData
 </UL>
 
 <P><STRONG><a name="[a1]"></a>AT24C02_WriteOneByte</STRONG> (Thumb, 52 bytes, Stack size 16 bytes, 24c02.o(i.AT24C02_WriteOneByte))
@@ -1016,8 +1015,7 @@ Global Symbols
 <LI><a href="#[9c]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;IIC_Send_Byte
 <LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 </UL>
-<BR>[Called By]<UL><LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
-<LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;StoreCurrentData
+<BR>[Called By]<UL><LI><a href="#[db]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;StoreCurrentData
 </UL>
 
 <P><STRONG><a name="[a2]"></a>BEEP_Init</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, beep.o(i.BEEP_Init))
@@ -1748,7 +1746,7 @@ Global Symbols
 <LI><a href="#[b1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;DisplayFullWaveform
 </UL>
 
-<P><STRONG><a name="[6f]"></a>main</STRONG> (Thumb, 712 bytes, Stack size 0 bytes, main.o(i.main))
+<P><STRONG><a name="[6f]"></a>main</STRONG> (Thumb, 678 bytes, Stack size 0 bytes, main.o(i.main))
 <BR><BR>[Stack]<UL><LI>Max Depth = 224 + Unknown Stack Size
 <LI>Call Chain = main &rArr; Wire4G_sendData &rArr; u1_TxData &rArr; u3_printf &rArr; vsprintf &rArr; _printf_char_common &rArr; __printf
 </UL>
@@ -1768,10 +1766,7 @@ Global Symbols
 <LI><a href="#[a7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BEEP_On
 <LI><a href="#[a5]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BEEP_Off
 <LI><a href="#[a2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;BEEP_Init
-<LI><a href="#[a1]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AT24C02_WriteOneByte
-<LI><a href="#[9a]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;AT24C02_ReadOneByte
 <LI><a href="#[f2]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Usart3_Init
-<LI><a href="#[f7]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u3_printf
 <LI><a href="#[de]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM4_Init
 <LI><a href="#[a0]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;delay_ms
 <LI><a href="#[e3]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;TIM_Cmd
@@ -1812,7 +1807,6 @@ Global Symbols
 </UL>
 <BR>[Called By]<UL><LI><a href="#[f4]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;Wire4G_sendData
 <LI><a href="#[f8]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;u1_TxData
-<LI><a href="#[6f]">&gt;&gt;</a>&nbsp;&nbsp;&nbsp;main
 </UL>
 
 <P><STRONG><a name="[69]"></a>_get_lc_numeric</STRONG> (Thumb, 44 bytes, Stack size 8 bytes, lc_numeric_c.o(locale$$code))

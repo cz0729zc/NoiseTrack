@@ -79,15 +79,15 @@ int main(void)
     /* 初始化TIM4定时器(1秒中断) */
     TIM4_Init(9999, 7199); // 10kHz计数频率，1秒中断
     
-    /* 24C02初始化检测 */
-    AT24C02_WriteOneByte(0, DATA_HEADER);
-    if(AT24C02_ReadOneByte(0) != DATA_HEADER) {
-        u3_printf("24C02 Error!\r\n");
-        while(1);
-    }
-    else{
-        u3_printf("24C02 OK!\r\n");
-    }
+//    /* 24C02初始化检测 */
+//    AT24C02_WriteOneByte(0, DATA_HEADER);
+//    if(AT24C02_ReadOneByte(0) != DATA_HEADER) {
+//        u3_printf("24C02 Error!\r\n");
+//        while(1);
+//    }
+//    else{
+//        u3_printf("24C02 OK!\r\n");
+//    }
 
     // 初始化波形缓冲区
     for(int i=0; i<WAVEFORM_POINTS; i++) {
@@ -100,6 +100,7 @@ int main(void)
     
     while (1) 
     {
+		//LCD_ShowString(0, 0, "Noise:");
         Key_Value key = Key_Scan(); // 扫描按键
         
         if(!view_history_mode) // 正常模式
